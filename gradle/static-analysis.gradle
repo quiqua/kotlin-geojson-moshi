@@ -1,0 +1,24 @@
+detekt {
+    version = "1.0.0.RC7"
+    defaultProfile {
+        config = file("$project.rootDir/config/detekt.yml")
+        input = file("src")
+        filters = ".*/resources/.*,.*/build/.*"
+        output = file("$project.rootDir/build/reports")
+        outputName = "detekt"
+    }
+}
+
+spotless {
+    kotlin {
+        target "src/**/*.kt"
+        // Optional user arguments can be set as such:
+        ktlint("0.23.1").userData(['indent_size': '4', 'continuation_indent_size' : '4'])
+
+        // also supports license headers
+        //licenseHeader '/* Licensed under Apache-2.0 */'	// License header
+    }
+}
+
+check.dependsOn detektCheck
+
