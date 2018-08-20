@@ -5,6 +5,7 @@ ext {
     hamkrest_version = '1.4.2.2'
     junit_jupiter_version = '5.2.0'
     junit_platform_version = '1.2.0'
+    mockk_version = '1.8.6'
 }
 
 repositories {
@@ -22,6 +23,7 @@ dependencies {
     testRuntimeOnly "org.junit.platform:junit-platform-launcher:$junit_platform_version"
 
     testImplementation "com.natpryce:hamkrest:$hamkrest_version"
+    testImplementation "io.mockk:mockk:$mockk_version"
     testImplementation("org.jetbrains.spek:spek-api:$spek_version") {
         exclude group: 'org.jetbrains.kotlin'
     }
