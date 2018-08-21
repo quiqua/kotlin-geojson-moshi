@@ -16,19 +16,20 @@ object GeometryValidation {
             validations.add(isPoint(it))
         }
 
-        return with(validations.filterNot { it is ValidationResult.Ok }) {
-            if (isEmpty()) ValidationResult.Ok() else first()
-        }
+        return validations.getFirstErrorOrOk()
     }
 
     fun isPolygon(coordinates: List<List<Position>>): ValidationResult {
-        coordinates.forEach {
-            val validation = isLinearRing(it)
-            if (validation !is ValidationResult.Ok) {
-                return validation
+        return when {
+            coordinates.isEmpty() -> ValidationResult.TooFewElements("")
+            else -> {
+                val validations = mutableListOf<ValidationResult>()
+                coordinates.forEach {
+                    validations.add(isLinearRing(it))
+                }
+                validations.getFirstErrorOrOk()
             }
         }
-        return ValidationResult.Ok()
     }
 
     private fun hasAtLeastTwoCoordinates(coordinates: List<Position>): ValidationResult {
@@ -58,6 +59,12 @@ object GeometryValidation {
                 }
             }
             else -> validation
+        }
+    }
+
+    private fun List<ValidationResult>.getFirstErrorOrOk(): ValidationResult {
+        return with(filterNot { it is ValidationResult.Ok }) {
+            if (isEmpty()) ValidationResult.Ok() else first()
         }
     }
 }
