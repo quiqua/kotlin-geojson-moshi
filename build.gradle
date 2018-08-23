@@ -1,0 +1,24 @@
+buildscript {
+    ext.kotlin_version = '1.2.51'
+
+    repositories {
+        jcenter()
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+plugins {
+    id 'kotlin-platform-jvm' version '1.2.51'
+    id 'io.gitlab.arturbosch.detekt' version '1.0.0.RC7'
+    id 'com.diffplug.gradle.spotless' version '3.13.0'
+}
+
+group 'eu.quiqua'
+version '1.0-SNAPSHOT'
+
+apply from: './gradle/dependencies.gradle'
+apply from: './gradle/basic-configuration.gradle'
+apply from: './gradle/static-analysis.gradle'

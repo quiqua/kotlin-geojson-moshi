@@ -69,7 +69,7 @@ internal class PolygonSpec : Spek({
             )
             val polygon = Polygon(coordinates = coordinates)
             it("Returns a Validation.OutOfRangeError") {
-                assert.that(polygon.validate(), isA<ValidationResult.OutOfRangeError>())
+                assert.that(polygon.validate(), isA<ValidationResult.OutOfRange>())
             }
         }
         context("Coordinates are not closed") {

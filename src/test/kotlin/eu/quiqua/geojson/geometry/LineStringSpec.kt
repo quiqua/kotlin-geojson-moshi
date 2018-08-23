@@ -47,7 +47,7 @@ internal class LineStringSpec : Spek({
             )
             val lineString = LineString(coordinates = coordinates)
             it("Returns a Validation.OutOfRangeError") {
-                assert.that(lineString.validate(), isA<ValidationResult.OutOfRangeError>())
+                assert.that(lineString.validate(), isA<ValidationResult.OutOfRange>())
             }
         }
     }

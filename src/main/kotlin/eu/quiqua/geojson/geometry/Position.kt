@@ -12,10 +12,10 @@ data class Position(val longitude: Double, val latitude: Double, val altitude: D
 
     fun validate(): ValidationResult {
         if (longitude !in longitudeBoundaries) {
-            return ValidationResult.OutOfRangeError("Longitude '$longitude' is out of range -180 to 180")
+            return ValidationResult.OutOfRange("Longitude '$longitude' is out of range -180 to 180")
         }
         if (latitude !in latitudeBoundaries) {
-            return ValidationResult.OutOfRangeError("Latitude '$latitude' is out of range -90 to 90")
+            return ValidationResult.OutOfRange("Latitude '$latitude' is out of range -90 to 90")
         }
         return ValidationResult.Ok()
     }

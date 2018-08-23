@@ -35,7 +35,7 @@ class PositionJsonAdapter {
         val validationResult = position.validate()
         return when (validationResult) {
             is ValidationResult.Ok -> position
-            is ValidationResult.OutOfRangeError -> throw JsonDataException(validationResult.reason)
+            is ValidationResult.OutOfRange -> throw JsonDataException(validationResult.reason)
             else -> throw JsonDataException("Unknown error during deserialization at ${reader.path}")
         }
     }

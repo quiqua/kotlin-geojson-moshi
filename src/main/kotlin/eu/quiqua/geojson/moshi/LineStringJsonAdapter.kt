@@ -57,7 +57,7 @@ class LineStringJsonAdapter {
         return when (validationResult) {
             is ValidationResult.Ok -> lineString
             is ValidationResult.TooFewElements -> throw JsonDataException(validationResult.reason)
-            is ValidationResult.OutOfRangeError -> throw JsonDataException(validationResult.reason)
+            is ValidationResult.OutOfRange -> throw JsonDataException(validationResult.reason)
             else -> throw JsonDataException("Unknown error during deserialization at ${reader.path}")
         }
     }

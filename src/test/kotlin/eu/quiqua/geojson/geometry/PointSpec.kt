@@ -41,7 +41,7 @@ internal class PointSpec : Spek({
         context("Create with invalid coordinates") {
             val point = Point(coordinates = Position(longitude = -1000.0, latitude = 302.0))
             it("Returns a Validation.OutOfRangeError") {
-                assert.that(point.validate(), isA<ValidationResult.OutOfRangeError>())
+                assert.that(point.validate(), isA<ValidationResult.OutOfRange>())
             }
         }
     }

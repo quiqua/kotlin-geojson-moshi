@@ -25,11 +25,11 @@ internal class GeometryValidationSpec : Spek({
         context("With invalid input") {
             it("Returns ValidationResult.OutOfRangeError when longitude is out of range") {
                 val coordinates = Position(longitude = 181.0, latitude = 1.0)
-                assert.that(GeometryValidation.isPoint(coordinates), isA<ValidationResult.OutOfRangeError>())
+                assert.that(GeometryValidation.isPoint(coordinates), isA<ValidationResult.OutOfRange>())
             }
             it("Returns ValidationResult.OutOfRangeError when latitude is out of range") {
                 val coordinates = Position(longitude = 1.0, latitude = 91.0)
-                assert.that(GeometryValidation.isPoint(coordinates), isA<ValidationResult.OutOfRangeError>())
+                assert.that(GeometryValidation.isPoint(coordinates), isA<ValidationResult.OutOfRange>())
             }
         }
     }
