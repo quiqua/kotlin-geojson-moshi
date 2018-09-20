@@ -2,13 +2,12 @@ package eu.quiqua.geojson.geometry
 
 import com.natpryce.hamkrest.assertion.assert
 import com.natpryce.hamkrest.isA
-import io.mockk.spyk
+import io.mockk.mockkObject
 import io.mockk.verify
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.context
 import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
-import org.jetbrains.spek.api.dsl.xit
 
 internal class GeometryValidationSpec : Spek({
     describe("Validate Point coordinates") {
@@ -49,15 +48,16 @@ internal class GeometryValidationSpec : Spek({
                 )
                 assert.that(GeometryValidation.isLineString(coordinates), isA<ValidationResult.Ok>())
             }
-            xit("Calls .isPoint for each coordinate in the linestring") {
+            it("Calls .isPoint for each coordinate in the linestring") {
                 val coordinates = listOf(
                     Position(longitude = 1.0, latitude = 1.0),
                     Position(longitude = 2.0, latitude = 2.0),
                     Position(longitude = 3.0, latitude = 3.0)
                 )
-                val mock = spyk<GeometryValidation>()
-                mock.isLineString(coordinates)
-                verify(exactly = 3) { mock.isPoint(any()) }
+                mockkObject(GeometryValidation) {
+                    GeometryValidation.isLineString(coordinates)
+                    verify(exactly = 3) { GeometryValidation.isPoint(any()) }
+                }
             }
         }
         context("With empty coordinates input") {
@@ -109,7 +109,7 @@ internal class GeometryValidationSpec : Spek({
                 )
                 assert.that(GeometryValidation.isPolygon(coordinates), isA<ValidationResult.Ok>())
             }
-            xit("Calls .isLineString for each list of coordinates") {
+            it("Calls .isLineString for each list of coordinates") {
                 val coordinates = listOf(
                     listOf(
                         Position(longitude = 1.0, latitude = 1.0, altitude = 1.0),
@@ -118,9 +118,10 @@ internal class GeometryValidationSpec : Spek({
                         Position(longitude = 1.0, latitude = 1.0, altitude = 1.0)
                     )
                 )
-                val mock = spyk<GeometryValidation>()
-                mock.isPolygon(coordinates)
-                verify(exactly = 1) { mock.isLineString(any()) }
+                mockkObject(GeometryValidation) {
+                    GeometryValidation.isPolygon(coordinates)
+                    verify(exactly = 1) { GeometryValidation.isLineString(any()) }
+                }
             }
         }
         context("With empty coordinates input") {
