@@ -6,6 +6,17 @@ object GeometryValidation {
 
     fun isPoint(coordinates: Position): ValidationResult = coordinates.validate()
 
+    fun isMultiPoint(coordinates: List<Position>): ValidationResult {
+        val validations = mutableListOf(
+            hasConsistentDimension(coordinates)
+        )
+
+        coordinates.forEach {
+            validations.add(isPoint(it))
+        }
+        return validations.getFirstErrorOrOk()
+    }
+
     fun isLineString(coordinates: List<Position>): ValidationResult {
         val validations = mutableListOf(
             hasAtLeastTwoCoordinates(coordinates),
