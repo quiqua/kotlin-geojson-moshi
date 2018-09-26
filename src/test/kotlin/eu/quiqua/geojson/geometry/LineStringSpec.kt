@@ -40,7 +40,7 @@ internal class LineStringSpec : Spek({
                 assert.that(lineString.validate(), isA<ValidationResult.IncompatibleCoordinateDimensions>())
             }
         }
-        context("Create with invalid coordinate boundaries ") {
+        context("Create with invalid coordinate boundaries") {
             val coordinates = listOf(
                 Position(longitude = -1000.0, latitude = 2.0),
                 Position(longitude = 2.0, latitude = 3.0)

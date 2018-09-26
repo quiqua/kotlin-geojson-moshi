@@ -24,7 +24,7 @@ internal class PointJsonAdapterSpec : Spek({
     val moshi = Moshi.Builder().add(PointJsonAdapter()).build()
     val adapter = moshi.adapter<Point>(Point::class.java)
     describe("From JSON to Object") {
-        context("Read a valid point object String") {
+        context("Read a valid Point object String") {
             val jsonString = "{\"coordinates\": [10.0,1.0], \"type\": \"point\"}"
             it("converts to a Point object with longitude and latitude") {
                 val point = adapter.fromJson(jsonString)!!
@@ -41,7 +41,7 @@ internal class PointJsonAdapterSpec : Spek({
                 }
             }
         }
-        context("Read an invalid point object String") {
+        context("Read an invalid Point object String") {
             context("With empty string") {
                 val jsonString = ""
                 it("Throws a EOFException") {

@@ -22,7 +22,7 @@ internal class MultiPointJsonAdapterSpec : Spek({
     val moshi = Moshi.Builder().add(MultiPointJsonAdapter()).build()
     val adapter = moshi.adapter<MultiPoint>(MultiPoint::class.java)
     describe("From JSON to Object") {
-        context("Read a valid point object String") {
+        context("Read a valid MultiPoint object String") {
             context("With one coordinate pair") {
                 val jsonString = "{\"coordinates\": [[10.0,1.0]], \"type\": \"multipoint\"}"
                 it("converts to a MultiPoint object") {
@@ -81,6 +81,12 @@ internal class MultiPointJsonAdapterSpec : Spek({
             }
             context("With out of bounds coordinates") {
                 val jsonString = "{\"coordinates\": [[1111.0, 1.0]], \"type\": \"multipoint\"}"
+                it("Throws a JsonDataException") {
+                    assert.that({ adapter.fromJson(jsonString) }, throws<JsonDataException>())
+                }
+            }
+            context("With different coordinate dimensions") {
+                val jsonString = "{\"coordinates\": [[111.0, 1.0], [1.0, 1.0, 1.0]], \"type\": \"multipoint\"}"
                 it("Throws a JsonDataException") {
                     assert.that({ adapter.fromJson(jsonString) }, throws<JsonDataException>())
                 }

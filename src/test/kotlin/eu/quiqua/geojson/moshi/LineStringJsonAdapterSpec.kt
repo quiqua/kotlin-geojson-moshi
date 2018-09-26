@@ -22,7 +22,7 @@ internal class LineStringJsonAdapterSpec : Spek({
     val moshi = Moshi.Builder().add(LineStringJsonAdapter()).build()
     val adapter = moshi.adapter<LineString>(LineString::class.java)
     describe("From JSON to Object") {
-        context("Read a valid point object String") {
+        context("Read a valid LineString object String") {
             val jsonString = "{\"coordinates\": [[10.0,1.0],[2.0,20.0]], \"type\": \"linestring\"}"
             it("converts to a LineString object with two coordinates") {
                 val lineString = adapter.fromJson(jsonString)!!

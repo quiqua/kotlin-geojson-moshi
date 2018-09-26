@@ -32,6 +32,53 @@ internal class GeometryValidationSpec : Spek({
             }
         }
     }
+    describe("Validate MultiPoint coordinates") {
+        context("With an empty array") {
+            it("Returns ValidationResult.TooFewElements") {
+                assert.that(GeometryValidation.isMultiPoint(emptyList()), isA<ValidationResult.TooFewElements>())
+            }
+        }
+        context("With at least one coordinate pair") {
+            val coordinates = listOf(
+                Position(longitude = 1.0, latitude = 1.0),
+                Position(longitude = 2.0, latitude = 2.0),
+                Position(longitude = 3.0, latitude = 3.0)
+            )
+            it("Calls .isPoint for each coordinate pair") {
+                mockkObject(GeometryValidation) {
+                    GeometryValidation.isMultiPoint(coordinates)
+                    verify(exactly = 3) { GeometryValidation.isPoint(any()) }
+                }
+            }
+            it("Returns ValidationResult.Ok") {
+                assert.that(GeometryValidation.isMultiPoint(coordinates), isA<ValidationResult.Ok>())
+            }
+        }
+    }
+    describe("Validate MultiLineString coordinates") {
+        context("With an empty array") {
+            it("Returns ValidationResult.TooFewElements") {
+                assert.that(GeometryValidation.isMultiLineString(emptyList()), isA<ValidationResult.TooFewElements>())
+            }
+        }
+        context("With at least one linestring coordinate array") {
+            val lineString = listOf(
+                Position(longitude = 1.0, latitude = 1.0),
+                Position(longitude = 2.0, latitude = 2.0),
+                Position(longitude = 3.0, latitude = 3.0)
+            )
+            val coordinates = listOf(lineString, lineString)
+            it("Calls .isLineString for each coordinate array") {
+                mockkObject(GeometryValidation) {
+                    GeometryValidation.isMultiLineString(coordinates)
+                    verify(exactly = 2) { GeometryValidation.isLineString(any()) }
+                }
+            }
+            it("Returns ValidationResult.Ok") {
+                assert.that(GeometryValidation.isMultiLineString(coordinates), isA<ValidationResult.Ok>())
+            }
+        }
+    }
     describe("Validate LineString coordinates") {
         context("With at least two positions") {
             it("Returns ValidationResult.Ok for 2D coordinates") {

@@ -1,5 +1,6 @@
 package eu.quiqua.geojson.moshi
 
+import com.natpryce.hamkrest.assertion.assert
 import com.natpryce.hamkrest.containsSubstring
 import com.natpryce.hamkrest.equalTo
 import com.natpryce.hamkrest.has
@@ -22,77 +23,56 @@ internal class PolygonJsonAdapterSpec : Spek({
     val moshi = Moshi.Builder().add(PolygonJsonAdapter()).build()
     val adapter = moshi.adapter<Polygon>(Polygon::class.java)
     describe("From JSON to Object") {
-        context("Read a valid point object String") {
+        context("Read a valid Polygon object String") {
             val jsonString =
                 "{\"coordinates\": [[[10.0,1.0],[10.0,2.0],[11.0,2.0],[11.0,1.0],[10.0,1.0]]], \"type\": \"polygon\"}"
             it("converts to a Polygon object with two coordinates") {
                 val polygon = adapter.fromJson(jsonString)!!
-                com.natpryce.hamkrest.assertion.assert.that(polygon.exteriorRing?.count(), equalTo(5))
-                com.natpryce.hamkrest.assertion.assert.that(polygon.type, isA<Type.Polygon>())
+                assert.that(polygon.exteriorRing?.count(), equalTo(5))
+                assert.that(polygon.type, isA<Type.Polygon>())
             }
         }
-        context("Read an invalid LineString object String") {
+        context("Read an invalid Polygon object String") {
             context("With empty string") {
                 val jsonString = ""
                 it("Throws a EOFException") {
-                    com.natpryce.hamkrest.assertion.assert.that(
-                        { adapter.fromJson(jsonString) },
-                        throws<EOFException>()
-                    )
+                    assert.that({ adapter.fromJson(jsonString) }, throws<EOFException>())
                 }
             }
             context("With wrong object") {
                 val jsonString = "{\"foo\": 1}"
                 it("Throws a JsonDataException") {
-                    com.natpryce.hamkrest.assertion.assert.that(
-                        { adapter.fromJson(jsonString) },
-                        throws<JsonDataException>()
-                    )
+                    assert.that({ adapter.fromJson(jsonString) }, throws<JsonDataException>())
                 }
             }
             context("With missing attribute type") {
                 val jsonString = "{\"coordinates\": [1.0,1.0]}"
                 it("Throws a JsonDataException") {
-                    com.natpryce.hamkrest.assertion.assert.that(
-                        { adapter.fromJson(jsonString) },
-                        throws<JsonDataException>()
-                    )
+                    assert.that({ adapter.fromJson(jsonString) }, throws<JsonDataException>())
                 }
             }
             context("With missing attribute coordinates") {
                 val jsonString = "{\"type\": \"point\"}"
                 it("Throws a JsonDataException") {
-                    com.natpryce.hamkrest.assertion.assert.that(
-                        { adapter.fromJson(jsonString) },
-                        throws<JsonDataException>()
-                    )
+                    assert.that({ adapter.fromJson(jsonString) }, throws<JsonDataException>())
                 }
             }
             context("With wrong attribute type") {
                 val jsonString = "{\"coordinates\": [1.0,1.0], \"type\": \"linestring\"}"
                 it("Throws a JsonDataException") {
-                    com.natpryce.hamkrest.assertion.assert.that(
-                        { adapter.fromJson(jsonString) },
-                        throws<JsonDataException>()
-                    )
+                    assert.that({ adapter.fromJson(jsonString) }, throws<JsonDataException>())
                 }
             }
             context("With wrong attribute coordinates") {
                 val jsonString = "{\"coordinates\": 1.0, \"type\": \"point\"}"
                 it("Throws a JsonDataException") {
-                    com.natpryce.hamkrest.assertion.assert.that(
-                        { adapter.fromJson(jsonString) },
-                        throws<JsonDataException>()
-                    )
+                    assert.that({ adapter.fromJson(jsonString) }, throws<JsonDataException>())
                 }
             }
             context("With out of bounds coordinates") {
                 val jsonString = "{\"coordinates\": [1111.0, 1.0], \"type\": \"point\"}"
                 it("Throws a JsonDataException") {
-                    com.natpryce.hamkrest.assertion.assert.that(
-                        { adapter.fromJson(jsonString) },
-                        throws<JsonDataException>()
-                    )
+                    assert.that({ adapter.fromJson(jsonString) }, throws<JsonDataException>())
                 }
             }
         }

@@ -57,7 +57,7 @@ internal class PolygonSpec : Spek({
                 assert.that(polygon.validate(), isA<ValidationResult.IncompatibleCoordinateDimensions>())
             }
         }
-        context("Create with invalid coordinate boundaries ") {
+        context("Create with invalid coordinate boundaries") {
             val coordinates = listOf(
                 listOf(
                     Position(longitude = 1.0, latitude = 2.0),

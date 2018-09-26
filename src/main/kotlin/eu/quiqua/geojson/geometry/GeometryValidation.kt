@@ -7,14 +7,18 @@ object GeometryValidation {
     fun isPoint(coordinates: Position): ValidationResult = coordinates.validate()
 
     fun isMultiPoint(coordinates: List<Position>): ValidationResult {
-        val validations = mutableListOf(
-            hasConsistentDimension(coordinates)
-        )
-
-        coordinates.forEach {
-            validations.add(isPoint(it))
+        return when {
+            coordinates.isEmpty() -> ValidationResult.TooFewElements("No coordinates provided to create a MultiPoint")
+            else -> {
+                val validations = mutableListOf(
+                    hasConsistentDimension(coordinates)
+                )
+                coordinates.forEach {
+                    validations.add(isPoint(it))
+                }
+                validations.getFirstErrorOrOk()
+            }
         }
-        return validations.getFirstErrorOrOk()
     }
 
     fun isLineString(coordinates: List<Position>): ValidationResult {
@@ -30,9 +34,22 @@ object GeometryValidation {
         return validations.getFirstErrorOrOk()
     }
 
+    fun isMultiLineString(coordinates: List<List<Position>>): ValidationResult {
+        return when {
+            coordinates.isEmpty() -> ValidationResult.TooFewElements("No coordinates provided to create a MultiLineString")
+            else -> {
+                val validations = mutableListOf<ValidationResult>()
+                coordinates.forEach {
+                    validations.add(isLineString(it))
+                }
+                validations.getFirstErrorOrOk()
+            }
+        }
+    }
+
     fun isPolygon(coordinates: List<List<Position>>): ValidationResult {
         return when {
-            coordinates.isEmpty() -> ValidationResult.TooFewElements("")
+            coordinates.isEmpty() -> ValidationResult.TooFewElements("No coordinates provided to create a Polygon")
             else -> {
                 val validations = mutableListOf<ValidationResult>()
                 coordinates.forEach {

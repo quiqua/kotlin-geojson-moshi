@@ -40,13 +40,20 @@ internal class MultiPointSpec : Spek({
                 assert.that(multiPoint.validate(), isA<ValidationResult.IncompatibleCoordinateDimensions>())
             }
         }
-        context("Create with invalid coordinate boundaries ") {
+        context("Create with invalid coordinate boundaries") {
             val coordinates = listOf(
                 Position(longitude = -1000.0, latitude = 2.0)
             )
             val multiPoint = MultiPoint(coordinates = coordinates)
             it("Returns a Validation.OutOfRangeError") {
                 assert.that(multiPoint.validate(), isA<ValidationResult.OutOfRange>())
+            }
+        }
+        context("Create with empty coordinates") {
+            val coordinates = emptyList<Position>()
+            val multiPoint = MultiPoint(coordinates = coordinates)
+            it("Returns a Validation.TooFewElements") {
+                assert.that(multiPoint.validate(), isA<ValidationResult.TooFewElements>())
             }
         }
     }
