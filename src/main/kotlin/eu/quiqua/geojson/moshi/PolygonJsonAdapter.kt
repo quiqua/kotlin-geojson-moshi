@@ -62,9 +62,10 @@ class PolygonJsonAdapter {
         val validationResult = polygon.validate()
         return when (validationResult) {
             is ValidationResult.Ok -> polygon
-            is ValidationResult.TooFewElements -> throw JsonDataException(validationResult.reason)
             is ValidationResult.OutOfRange -> throw JsonDataException(validationResult.reason)
-            else -> throw JsonDataException("Unknown error during deserialization at ${reader.path}")
+            is ValidationResult.TooFewElements -> throw JsonDataException(validationResult.reason)
+            is ValidationResult.IncompatibleCoordinateDimensions -> throw JsonDataException(validationResult.reason)
+            is ValidationResult.NoLinearRing -> throw JsonDataException(validationResult.reason)
         }
     }
 
