@@ -10,8 +10,10 @@ import org.jetbrains.spek.api.dsl.it
 internal class MultiPointSpec : Spek({
     describe("A MultiPoint object") {
         context("Create with valid 2D coordinates") {
-            val coordinates =
-                listOf(Position(longitude = 1.0, latitude = 2.0), Position(longitude = 2.0, latitude = 3.0))
+            val coordinates = listOf(
+                Position(longitude = 1.0, latitude = 2.0),
+                Position(longitude = 2.0, latitude = 3.0)
+            )
             val multiPoint = MultiPoint(coordinates = coordinates)
             it("Will validate successfully") {
                 assert.that(multiPoint.validate(), isA<ValidationResult.Ok>())
