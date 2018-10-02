@@ -25,7 +25,7 @@ internal class MultiLineStringJsonAdapterSpec : Spek({
         context("Read a valid MultiLineString object String") {
             context("With one coordinate subarray") {
                 val jsonString = "{\"coordinates\": [[[10.0,1.0],[11.0,2.0]]], \"type\": \"multilinestring\"}"
-                it("converts to a MultiPoint object") {
+                it("converts to a MultiLineString object") {
                     val multiLineString = adapter.fromJson(jsonString)!!
                     assert.that(multiLineString.coordinates.count(), equalTo(1))
                     assert.that(multiLineString.type, isA<Type.MultiLineString>())
@@ -34,7 +34,7 @@ internal class MultiLineStringJsonAdapterSpec : Spek({
             context("With two coordinate subarrays") {
                 val jsonString =
                     "{\"coordinates\": [[[10.0,1.0],[11.0,2.0]],[[3.0,3.0],[4.0,4.0]]], \"type\": \"multilinestring\"}"
-                it("converts to a MultiPoint object") {
+                it("converts to a MultiLineString object") {
                     val multiLineString = adapter.fromJson(jsonString)!!
                     assert.that(multiLineString.coordinates.count(), equalTo(2))
                     assert.that(multiLineString.type, isA<Type.MultiLineString>())
@@ -61,7 +61,7 @@ internal class MultiLineStringJsonAdapterSpec : Spek({
                 }
             }
             context("With missing attribute coordinates") {
-                val jsonString = "{\"type\": \"multipoint\"}"
+                val jsonString = "{\"type\": \"multilinestring\"}"
                 it("Throws a JsonDataException") {
                     assert.that({ adapter.fromJson(jsonString) }, throws<JsonDataException>())
                 }
@@ -73,25 +73,25 @@ internal class MultiLineStringJsonAdapterSpec : Spek({
                 }
             }
             context("With wrong attribute coordinates") {
-                val jsonString = "{\"coordinates\": 1.0, \"type\": \"multipoint\"}"
+                val jsonString = "{\"coordinates\": 1.0, \"type\": \"multilinestring\"}"
                 it("Throws a JsonDataException") {
                     assert.that({ adapter.fromJson(jsonString) }, throws<JsonDataException>())
                 }
             }
             context("With out of bounds coordinates") {
-                val jsonString = "{\"coordinates\": [[[1111.0,1.0],[2.0,2.0]]], \"type\": \"multipoint\"}"
+                val jsonString = "{\"coordinates\": [[[1111.0,1.0],[2.0,2.0]]], \"type\": \"multilinestring\"}"
                 it("Throws a JsonDataException") {
                     assert.that({ adapter.fromJson(jsonString) }, throws<JsonDataException>())
                 }
             }
             context("With too few coordinates") {
-                val jsonString = "{\"coordinates\": [[[1.0,1.0]]], \"type\": \"multipoint\"}"
+                val jsonString = "{\"coordinates\": [[[1.0,1.0]]], \"type\": \"multilinestring\"}"
                 it("Throws a JsonDataException") {
                     assert.that({ adapter.fromJson(jsonString) }, throws<JsonDataException>())
                 }
             }
             context("With different coordinate dimensions") {
-                val jsonString = "{\"coordinates\": [[[1.0,1.0],[2.0,2.0,2.0]]], \"type\": \"multipoint\"}"
+                val jsonString = "{\"coordinates\": [[[1.0,1.0],[2.0,2.0,2.0]]], \"type\": \"multilinestring\"}"
                 it("Throws a JsonDataException") {
                     assert.that({ adapter.fromJson(jsonString) }, throws<JsonDataException>())
                 }

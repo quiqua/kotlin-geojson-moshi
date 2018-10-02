@@ -60,6 +60,19 @@ object GeometryValidation {
         }
     }
 
+    fun isMultiPolygon(coordinates: List<List<List<Position>>>): ValidationResult {
+        return when {
+            coordinates.isEmpty() -> ValidationResult.TooFewElements("No coordinates provided to create a MultiPolygon")
+            else -> {
+                val validations = mutableListOf<ValidationResult>()
+                coordinates.forEach {
+                    validations.add(isPolygon(it))
+                }
+                validations.getFirstErrorOrOk()
+            }
+        }
+    }
+
     private fun hasAtLeastTwoCoordinates(coordinates: List<Position>): ValidationResult {
         return when (coordinates.count() < 2) {
             true -> ValidationResult.TooFewElements("A LineString consists of at least two coordinate pairs")

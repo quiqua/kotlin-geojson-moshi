@@ -55,30 +55,6 @@ internal class GeometryValidationSpec : Spek({
             }
         }
     }
-    describe("Validate MultiLineString coordinates") {
-        context("With an empty array") {
-            it("Returns ValidationResult.TooFewElements") {
-                assert.that(GeometryValidation.isMultiLineString(emptyList()), isA<ValidationResult.TooFewElements>())
-            }
-        }
-        context("With at least one linestring coordinate array") {
-            val lineString = listOf(
-                Position(longitude = 1.0, latitude = 1.0),
-                Position(longitude = 2.0, latitude = 2.0),
-                Position(longitude = 3.0, latitude = 3.0)
-            )
-            val coordinates = listOf(lineString, lineString)
-            it("Calls .isLineString for each coordinate array") {
-                mockkObject(GeometryValidation) {
-                    GeometryValidation.isMultiLineString(coordinates)
-                    verify(exactly = 2) { GeometryValidation.isLineString(any()) }
-                }
-            }
-            it("Returns ValidationResult.Ok") {
-                assert.that(GeometryValidation.isMultiLineString(coordinates), isA<ValidationResult.Ok>())
-            }
-        }
-    }
     describe("Validate LineString coordinates") {
         context("With at least two positions") {
             it("Returns ValidationResult.Ok for 2D coordinates") {
@@ -129,6 +105,30 @@ internal class GeometryValidationSpec : Spek({
                     GeometryValidation.isLineString(coordinates),
                     isA<ValidationResult.IncompatibleCoordinateDimensions>()
                 )
+            }
+        }
+    }
+    describe("Validate MultiLineString coordinates") {
+        context("With an empty array") {
+            it("Returns ValidationResult.TooFewElements") {
+                assert.that(GeometryValidation.isMultiLineString(emptyList()), isA<ValidationResult.TooFewElements>())
+            }
+        }
+        context("With at least one linestring coordinate array") {
+            val lineString = listOf(
+                Position(longitude = 1.0, latitude = 1.0),
+                Position(longitude = 2.0, latitude = 2.0),
+                Position(longitude = 3.0, latitude = 3.0)
+            )
+            val coordinates = listOf(lineString, lineString)
+            it("Calls .isLineString for each coordinate array") {
+                mockkObject(GeometryValidation) {
+                    GeometryValidation.isMultiLineString(coordinates)
+                    verify(exactly = 2) { GeometryValidation.isLineString(any()) }
+                }
+            }
+            it("Returns ValidationResult.Ok") {
+                assert.that(GeometryValidation.isMultiLineString(coordinates), isA<ValidationResult.Ok>())
             }
         }
     }
@@ -216,6 +216,33 @@ internal class GeometryValidationSpec : Spek({
                     GeometryValidation.isPolygon(coordinates),
                     isA<ValidationResult.IncompatibleCoordinateDimensions>()
                 )
+            }
+        }
+    }
+    describe("Validate MultiPolygon coordinates") {
+        context("With an empty array") {
+            it("Returns ValidationResult.TooFewElements") {
+                assert.that(GeometryValidation.isMultiPolygon(emptyList()), isA<ValidationResult.TooFewElements>())
+            }
+        }
+        context("With at least one polygon coordinate array") {
+            val polygon = listOf(
+                listOf(
+                    Position(longitude = 1.0, latitude = 1.0, altitude = 1.0),
+                    Position(longitude = 2.0, latitude = 2.0, altitude = 1.0),
+                    Position(longitude = 1.0, latitude = 3.0, altitude = 1.0),
+                    Position(longitude = 1.0, latitude = 1.0, altitude = 1.0)
+                )
+            )
+            val coordinates = listOf(polygon, polygon)
+            it("Calls .isPolygon for each coordinate array") {
+                mockkObject(GeometryValidation) {
+                    GeometryValidation.isMultiPolygon(coordinates)
+                    verify(exactly = 2) { GeometryValidation.isPolygon(any()) }
+                }
+            }
+            it("Returns ValidationResult.Ok") {
+                assert.that(GeometryValidation.isMultiPolygon(coordinates), isA<ValidationResult.Ok>())
             }
         }
     }
