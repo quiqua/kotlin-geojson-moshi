@@ -56,10 +56,7 @@ class MultiPointJsonAdapter {
         val validationResult = multiPoint.validate()
         return when (validationResult) {
             is ValidationResult.Ok -> multiPoint
-            is ValidationResult.OutOfRange -> throw JsonDataException(validationResult.reason)
-            is ValidationResult.TooFewElements -> throw JsonDataException(validationResult.reason)
-            is ValidationResult.IncompatibleCoordinateDimensions -> throw JsonDataException(validationResult.reason)
-            else -> throw JsonDataException("Unknown error during deserialization at ${reader.path}")
+            else -> throw JsonDataException(validationResult.reason)
         }
     }
 

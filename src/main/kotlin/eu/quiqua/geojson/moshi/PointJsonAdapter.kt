@@ -50,8 +50,7 @@ class PointJsonAdapter {
         val validationResult = point.validate()
         return when (validationResult) {
             is ValidationResult.Ok -> point
-            is ValidationResult.OutOfRange -> throw JsonDataException(validationResult.reason)
-            else -> throw JsonDataException("Unknown error during deserialization at ${reader.path}")
+            else -> throw JsonDataException(validationResult.reason)
         }
     }
 

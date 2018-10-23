@@ -56,10 +56,7 @@ class LineStringJsonAdapter {
         val validationResult = lineString.validate()
         return when (validationResult) {
             is ValidationResult.Ok -> lineString
-            is ValidationResult.OutOfRange -> throw JsonDataException(validationResult.reason)
-            is ValidationResult.TooFewElements -> throw JsonDataException(validationResult.reason)
-            is ValidationResult.IncompatibleCoordinateDimensions -> throw JsonDataException(validationResult.reason)
-            else -> throw JsonDataException("Unknown error during deserialization at ${reader.path}")
+            else -> throw JsonDataException(validationResult.reason)
         }
     }
 

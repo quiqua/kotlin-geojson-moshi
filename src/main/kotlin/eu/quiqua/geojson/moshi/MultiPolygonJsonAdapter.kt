@@ -68,10 +68,7 @@ class MultiPolygonJsonAdapter {
         val validationResult = multiPolygon.validate()
         return when (validationResult) {
             is ValidationResult.Ok -> multiPolygon
-            is ValidationResult.OutOfRange -> throw JsonDataException(validationResult.reason)
-            is ValidationResult.TooFewElements -> throw JsonDataException(validationResult.reason)
-            is ValidationResult.IncompatibleCoordinateDimensions -> throw JsonDataException(validationResult.reason)
-            is ValidationResult.NoLinearRing -> throw JsonDataException(validationResult.reason)
+            else -> throw JsonDataException(validationResult.reason)
         }
     }
 
