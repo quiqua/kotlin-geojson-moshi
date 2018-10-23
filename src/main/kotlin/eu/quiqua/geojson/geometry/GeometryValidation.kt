@@ -1,5 +1,7 @@
 package eu.quiqua.geojson.geometry
 
+import eu.quiqua.geojson.ktx.getFirstErrorOrOk
+
 object GeometryValidation {
 
     private const val MINIMUM_LINEAR_RING_COORDINATES = 4
@@ -100,12 +102,6 @@ object GeometryValidation {
                 }
             }
             else -> validation
-        }
-    }
-
-    private fun List<ValidationResult>.getFirstErrorOrOk(): ValidationResult {
-        return with(filterNot { it is ValidationResult.Ok }) {
-            if (isEmpty()) ValidationResult.Ok() else first()
         }
     }
 }
