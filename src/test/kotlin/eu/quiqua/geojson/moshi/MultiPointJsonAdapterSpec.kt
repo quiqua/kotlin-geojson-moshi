@@ -9,9 +9,9 @@ import com.natpryce.hamkrest.present
 import com.natpryce.hamkrest.throws
 import com.squareup.moshi.JsonDataException
 import com.squareup.moshi.Moshi
-import eu.quiqua.geojson.geometry.MultiPoint
-import eu.quiqua.geojson.geometry.Position
-import eu.quiqua.geojson.geometry.Type
+import eu.quiqua.geojson.model.geometry.MultiPoint
+import eu.quiqua.geojson.model.geometry.Position
+import eu.quiqua.geojson.model.geometry.Type
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.context
 import org.jetbrains.spek.api.dsl.describe

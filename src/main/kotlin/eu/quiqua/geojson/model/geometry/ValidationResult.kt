@@ -1,4 +1,4 @@
-package eu.quiqua.geojson.geometry
+package eu.quiqua.geojson.model.geometry
 
 sealed class ValidationResult(open val reason: String?) {
     class Ok(reason: String? = null) : ValidationResult(reason)

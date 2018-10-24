@@ -1,4 +1,4 @@
-package eu.quiqua.geojson.geometry
+package eu.quiqua.geojson.model.geometry
 
 data class Polygon(val coordinates: List<List<Position>>) : Geometry {
     override fun validate(): ValidationResult = GeometryValidation.isPolygon(coordinates)

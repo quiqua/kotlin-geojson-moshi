@@ -1,4 +1,4 @@
-package eu.quiqua.geojson.geometry
+package eu.quiqua.geojson.model.geometry
 
 data class MultiPolygon(val coordinates: List<List<List<Position>>>) : Geometry {
     override val type: Type

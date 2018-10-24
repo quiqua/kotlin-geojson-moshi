@@ -1,6 +1,6 @@
-package eu.quiqua.geojson.geometry
+package eu.quiqua.geojson.model.geometry
 
-import eu.quiqua.geojson.ktx.getFirstErrorOrOk
+import eu.quiqua.geojson.extension.getFirstErrorOrOk
 
 object GeometryValidation {
 

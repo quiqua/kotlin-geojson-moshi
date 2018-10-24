@@ -5,8 +5,8 @@ import com.squareup.moshi.JsonDataException
 import com.squareup.moshi.JsonReader
 import com.squareup.moshi.JsonWriter
 import com.squareup.moshi.ToJson
-import eu.quiqua.geojson.geometry.Position
-import eu.quiqua.geojson.geometry.ValidationResult
+import eu.quiqua.geojson.model.geometry.Position
+import eu.quiqua.geojson.model.geometry.ValidationResult
 import java.lang.NullPointerException
 
 class PositionJsonAdapter {

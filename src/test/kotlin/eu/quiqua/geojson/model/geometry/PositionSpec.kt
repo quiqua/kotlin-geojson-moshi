@@ -1,4 +1,4 @@
-package eu.quiqua.geojson.geometry
+package eu.quiqua.geojson.model.geometry
 
 import com.natpryce.hamkrest.assertion.assert
 import com.natpryce.hamkrest.cast

@@ -1,4 +1,4 @@
-package eu.quiqua.geojson.geometry
+package eu.quiqua.geojson.model.geometry
 
 data class Position(val longitude: Double, val latitude: Double, val altitude: Double? = null) {
     companion object {
