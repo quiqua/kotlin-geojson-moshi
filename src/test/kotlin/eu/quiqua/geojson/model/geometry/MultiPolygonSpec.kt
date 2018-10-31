@@ -2,6 +2,7 @@ package eu.quiqua.geojson.model.geometry
 
 import com.natpryce.hamkrest.assertion.assert
 import com.natpryce.hamkrest.isA
+import eu.quiqua.geojson.model.Type
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.context
 import org.jetbrains.spek.api.dsl.describe
@@ -77,8 +78,8 @@ internal class MultiPolygonSpec : Spek({
                 )
             )
             val multiPolygon = MultiPolygon(coordinates = coordinates)
-            it("Returns a Validation.IncompatibleCoordinateDimensions") {
-                assert.that(multiPolygon.validate(), isA<ValidationResult.IncompatibleCoordinateDimensions>())
+            it("Returns a Validation.Error.IncompatibleCoordinateDimensions") {
+                assert.that(multiPolygon.validate(), isA<ValidationResult.Error.IncompatibleCoordinateDimensions>())
             }
         }
         context("Create with invalid coordinate boundaries") {
@@ -94,15 +95,15 @@ internal class MultiPolygonSpec : Spek({
                 )
             )
             val multiPolygon = MultiPolygon(coordinates = coordinates)
-            it("Returns a Validation.OutOfRangeError") {
-                assert.that(multiPolygon.validate(), isA<ValidationResult.OutOfRange>())
+            it("Returns a Validation.Error.OutOfRange") {
+                assert.that(multiPolygon.validate(), isA<ValidationResult.Error.OutOfRange>())
             }
         }
         context("Create with empty coordinates") {
             val coordinates = emptyList<List<List<Position>>>()
             val multiPolygon = MultiPolygon(coordinates = coordinates)
-            it("Returns a Validation.TooFewElements") {
-                assert.that(multiPolygon.validate(), isA<ValidationResult.TooFewElements>())
+            it("Returns a Validation.Error.TooFewElements") {
+                assert.that(multiPolygon.validate(), isA<ValidationResult.Error.TooFewElements>())
             }
         }
         context("Coordinates are not closed") {
@@ -117,8 +118,8 @@ internal class MultiPolygonSpec : Spek({
                 )
             )
             val multiPolygon = MultiPolygon(coordinates = coordinates)
-            it("Returns a Validation.NoLinearRing") {
-                assert.that(multiPolygon.validate(), isA<ValidationResult.NoLinearRing>())
+            it("Returns a Validation.Error.NoLinearRing") {
+                assert.that(multiPolygon.validate(), isA<ValidationResult.Error.NoLinearRing>())
             }
         }
         context("Coordinates only represent a closed line") {
@@ -132,8 +133,8 @@ internal class MultiPolygonSpec : Spek({
                 )
             )
             val multiPolygon = MultiPolygon(coordinates = coordinates)
-            it("Returns a Validation.NoLinearRing") {
-                assert.that(multiPolygon.validate(), isA<ValidationResult.NoLinearRing>())
+            it("Returns a Validation.Error.NoLinearRing") {
+                assert.that(multiPolygon.validate(), isA<ValidationResult.Error.NoLinearRing>())
             }
         }
     }

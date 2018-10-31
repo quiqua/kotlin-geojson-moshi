@@ -1,6 +1,7 @@
-package eu.quiqua.geojson.model.geometry
+package eu.quiqua.geojson.model
 
 import com.natpryce.hamkrest.assertion.assert
+import com.natpryce.hamkrest.equalTo
 import com.natpryce.hamkrest.isA
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.context
@@ -31,6 +32,12 @@ internal class TypeSpec : Spek({
             it("Creates a Type.GeometryCollection object") {
                 assert.that(Type.convertFromString("GeometryCollection"), isA<Type.GeometryCollection>())
             }
+            it("Creates a Type.Feature object") {
+                assert.that(Type.convertFromString("Feature"), isA<Type.Feature>())
+            }
+            it("Creates a Type.FeatureCollection object") {
+                assert.that(Type.convertFromString("FeatureCollection"), isA<Type.FeatureCollection>())
+            }
         }
         context("with a lower case String") {
             it("Creates a Type.Point object") {
@@ -46,6 +53,35 @@ internal class TypeSpec : Spek({
             it("Creates a Type.Unknown object") {
                 assert.that(Type.convertFromString("does-not-exist"), isA<Type.Unknown>())
             }
+        }
+    }
+    describe("Create a String from a Type object") {
+        it("Creates a Point string") {
+            assert.that(Type.convertToString(Type.Point), equalTo("Point"))
+        }
+        it("Creates a LineString string") {
+            assert.that(Type.convertToString(Type.LineString), equalTo("LineString"))
+        }
+        it("Creates a Polygon string") {
+            assert.that(Type.convertToString(Type.Polygon), equalTo("Polygon"))
+        }
+        it("Creates a MultiPoint string") {
+            assert.that(Type.convertToString(Type.MultiPoint), equalTo("MultiPoint"))
+        }
+        it("Creates a MultiLineString string") {
+            assert.that(Type.convertToString(Type.MultiLineString), equalTo("MultiLineString"))
+        }
+        it("Creates a MultiPolygon string") {
+            assert.that(Type.convertToString(Type.MultiPolygon), equalTo("MultiPolygon"))
+        }
+        it("Creates a GeometryCollection string") {
+            assert.that(Type.convertToString(Type.GeometryCollection), equalTo("GeometryCollection"))
+        }
+        it("Creates a Feature string") {
+            assert.that(Type.convertToString(Type.Feature), equalTo("Feature"))
+        }
+        it("Creates a FeatureCollection string") {
+            assert.that(Type.convertToString(Type.FeatureCollection), equalTo("FeatureCollection"))
         }
     }
 })

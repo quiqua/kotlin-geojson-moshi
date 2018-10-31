@@ -2,6 +2,7 @@ package eu.quiqua.geojson.model.geometry
 
 import com.natpryce.hamkrest.assertion.assert
 import com.natpryce.hamkrest.isA
+import eu.quiqua.geojson.model.Type
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.context
 import org.jetbrains.spek.api.dsl.describe
@@ -23,8 +24,8 @@ internal class GeometryCollectionSpec : Spek({
                 Point(coordinates = Position(longitude = 1.0, latitude = 1.0))
             )
             val geometryCollection = GeometryCollection(geometries)
-            it("Will validate successfully") {
-                assert.that(geometryCollection.validate(), isA<ValidationResult.Ok>())
+            it("Will validate with a warning") {
+                assert.that(geometryCollection.validate(), isA<ValidationResult.Warning.AvoidSingleGeometry>())
             }
         }
         context("Create with a multipoint geometry array") {
@@ -37,8 +38,8 @@ internal class GeometryCollectionSpec : Spek({
                 )
             )
             val geometryCollection = GeometryCollection(geometries)
-            it("Will validate successfully") {
-                assert.that(geometryCollection.validate(), isA<ValidationResult.Ok>())
+            it("Will validate with a warning") {
+                assert.that(geometryCollection.validate(), isA<ValidationResult.Warning.AvoidSingleGeometry>())
             }
         }
         context("Create with a linestring geometry array") {
@@ -51,8 +52,8 @@ internal class GeometryCollectionSpec : Spek({
                 )
             )
             val geometryCollection = GeometryCollection(geometries)
-            it("Will validate successfully") {
-                assert.that(geometryCollection.validate(), isA<ValidationResult.Ok>())
+            it("Will validate with a warning") {
+                assert.that(geometryCollection.validate(), isA<ValidationResult.Warning.AvoidSingleGeometry>())
             }
         }
         context("Create with a multilinestring geometry array") {
@@ -65,8 +66,8 @@ internal class GeometryCollectionSpec : Spek({
                 )
             )
             val geometryCollection = GeometryCollection(geometries)
-            it("Will validate successfully") {
-                assert.that(geometryCollection.validate(), isA<ValidationResult.Ok>())
+            it("Will validate with a warning") {
+                assert.that(geometryCollection.validate(), isA<ValidationResult.Warning.AvoidSingleGeometry>())
             }
         }
         context("Create with a polygon geometry array") {
@@ -84,8 +85,8 @@ internal class GeometryCollectionSpec : Spek({
                 )
             )
             val geometryCollection = GeometryCollection(geometries)
-            it("Will validate successfully") {
-                assert.that(geometryCollection.validate(), isA<ValidationResult.Ok>())
+            it("Will validate with a warning") {
+                assert.that(geometryCollection.validate(), isA<ValidationResult.Warning.AvoidSingleGeometry>())
             }
         }
         context("Create with a multipolygon geometry array") {
@@ -114,8 +115,8 @@ internal class GeometryCollectionSpec : Spek({
                 )
             )
             val geometryCollection = GeometryCollection(geometries)
-            it("Will validate successfully") {
-                assert.that(geometryCollection.validate(), isA<ValidationResult.Ok>())
+            it("Will validate with a warning") {
+                assert.that(geometryCollection.validate(), isA<ValidationResult.Warning.AvoidSingleGeometry>())
             }
         }
         context("Create with a mixed geometry array") {

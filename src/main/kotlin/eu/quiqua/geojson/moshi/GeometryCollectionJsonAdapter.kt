@@ -5,6 +5,7 @@ import com.squareup.moshi.JsonDataException
 import com.squareup.moshi.JsonReader
 import com.squareup.moshi.JsonWriter
 import com.squareup.moshi.ToJson
+import eu.quiqua.geojson.model.Type
 import eu.quiqua.geojson.model.geometry.Geometry
 import eu.quiqua.geojson.model.geometry.GeometryCollection
 import eu.quiqua.geojson.model.geometry.LineString
@@ -13,7 +14,6 @@ import eu.quiqua.geojson.model.geometry.MultiPoint
 import eu.quiqua.geojson.model.geometry.MultiPolygon
 import eu.quiqua.geojson.model.geometry.Point
 import eu.quiqua.geojson.model.geometry.Polygon
-import eu.quiqua.geojson.model.geometry.Type
 import eu.quiqua.geojson.model.geometry.ValidationResult
 import java.lang.NullPointerException
 
@@ -77,6 +77,10 @@ class GeometryCollectionJsonAdapter {
         val validationResult = geometryCollection.validate()
         return when (validationResult) {
             is ValidationResult.Ok -> geometryCollection
+            is ValidationResult.Warning -> {
+                // add warning
+                geometryCollection
+            }
             else -> throw JsonDataException(validationResult.reason)
         }
     }
@@ -97,6 +101,7 @@ class GeometryCollectionJsonAdapter {
                 Type.MultiPoint -> multiPointDelegate.toJson(writer, it as MultiPoint)
                 Type.MultiLineString -> multiLineStringDelegate.toJson(writer, it as MultiLineString)
                 Type.MultiPolygon -> multiPolygonDelegate.toJson(writer, it as MultiPolygon)
+                else -> throw JsonDataException("Unable to serialize object of type ${it.type}.")
             }
         }
         writer.endArray()

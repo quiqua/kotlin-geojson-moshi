@@ -2,6 +2,7 @@ package eu.quiqua.geojson.model.geometry
 
 import com.natpryce.hamkrest.assertion.assert
 import com.natpryce.hamkrest.isA
+import eu.quiqua.geojson.model.Type
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.context
 import org.jetbrains.spek.api.dsl.describe
@@ -38,8 +39,8 @@ internal class MultiPointSpec : Spek({
                 Position(longitude = 2.0, latitude = 3.0, altitude = 1.5)
             )
             val multiPoint = MultiPoint(coordinates = coordinates)
-            it("Returns a Validation.IncompatibleCoordinateDimensions") {
-                assert.that(multiPoint.validate(), isA<ValidationResult.IncompatibleCoordinateDimensions>())
+            it("Returns a Validation.Error.IncompatibleCoordinateDimensions") {
+                assert.that(multiPoint.validate(), isA<ValidationResult.Error.IncompatibleCoordinateDimensions>())
             }
         }
         context("Create with invalid coordinate boundaries") {
@@ -47,15 +48,15 @@ internal class MultiPointSpec : Spek({
                 Position(longitude = -1000.0, latitude = 2.0)
             )
             val multiPoint = MultiPoint(coordinates = coordinates)
-            it("Returns a Validation.OutOfRangeError") {
-                assert.that(multiPoint.validate(), isA<ValidationResult.OutOfRange>())
+            it("Returns a Validation.Error.OutOfRange") {
+                assert.that(multiPoint.validate(), isA<ValidationResult.Error.OutOfRange>())
             }
         }
         context("Create with empty coordinates") {
             val coordinates = emptyList<Position>()
             val multiPoint = MultiPoint(coordinates = coordinates)
-            it("Returns a Validation.TooFewElements") {
-                assert.that(multiPoint.validate(), isA<ValidationResult.TooFewElements>())
+            it("Returns a Validation.Error.TooFewElements") {
+                assert.that(multiPoint.validate(), isA<ValidationResult.Error.TooFewElements>())
             }
         }
     }

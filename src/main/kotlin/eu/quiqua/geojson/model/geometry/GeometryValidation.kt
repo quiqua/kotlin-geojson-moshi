@@ -10,7 +10,7 @@ object GeometryValidation {
 
     fun isMultiPoint(coordinates: List<Position>): ValidationResult {
         return when {
-            coordinates.isEmpty() -> ValidationResult.TooFewElements("No coordinates provided to create a MultiPoint")
+            coordinates.isEmpty() -> ValidationResult.Error.TooFewElements("No coordinates provided to create a MultiPoint")
             else -> {
                 val validations = mutableListOf(
                     hasConsistentDimension(coordinates)
@@ -38,7 +38,7 @@ object GeometryValidation {
 
     fun isMultiLineString(coordinates: List<List<Position>>): ValidationResult {
         return when {
-            coordinates.isEmpty() -> ValidationResult.TooFewElements("No coordinates provided to create a MultiLineString")
+            coordinates.isEmpty() -> ValidationResult.Error.TooFewElements("No coordinates provided to create a MultiLineString")
             else -> {
                 val validations = mutableListOf<ValidationResult>()
                 coordinates.forEach {
@@ -51,7 +51,7 @@ object GeometryValidation {
 
     fun isPolygon(coordinates: List<List<Position>>): ValidationResult {
         return when {
-            coordinates.isEmpty() -> ValidationResult.TooFewElements("No coordinates provided to create a Polygon")
+            coordinates.isEmpty() -> ValidationResult.Error.TooFewElements("No coordinates provided to create a Polygon")
             else -> {
                 val validations = mutableListOf<ValidationResult>()
                 coordinates.forEach {
@@ -64,7 +64,7 @@ object GeometryValidation {
 
     fun isMultiPolygon(coordinates: List<List<List<Position>>>): ValidationResult {
         return when {
-            coordinates.isEmpty() -> ValidationResult.TooFewElements("No coordinates provided to create a MultiPolygon")
+            coordinates.isEmpty() -> ValidationResult.Error.TooFewElements("No coordinates provided to create a MultiPolygon")
             else -> {
                 val validations = mutableListOf<ValidationResult>()
                 coordinates.forEach {
@@ -77,7 +77,7 @@ object GeometryValidation {
 
     private fun hasAtLeastTwoCoordinates(coordinates: List<Position>): ValidationResult {
         return when (coordinates.count() < 2) {
-            true -> ValidationResult.TooFewElements("A LineString consists of at least two coordinate pairs")
+            true -> ValidationResult.Error.TooFewElements("A LineString consists of at least two coordinate pairs")
             false -> ValidationResult.Ok()
         }
     }
@@ -86,7 +86,7 @@ object GeometryValidation {
         val coordinatesWithAltitude = coordinates.filter { it.hasAltitude }
         val coordinatesWithoutAltitude = coordinates.filterNot { it.hasAltitude }
         return when (coordinatesWithAltitude.isNotEmpty() and coordinatesWithoutAltitude.isNotEmpty()) {
-            true -> ValidationResult.IncompatibleCoordinateDimensions("Coordinates consist of 2D and 3D geometries")
+            true -> ValidationResult.Error.IncompatibleCoordinateDimensions("Coordinates consist of 2D and 3D geometries")
             false -> ValidationResult.Ok()
         }
     }
@@ -98,7 +98,7 @@ object GeometryValidation {
                 if (count() >= MINIMUM_LINEAR_RING_COORDINATES && first() == last()) {
                     ValidationResult.Ok()
                 } else {
-                    ValidationResult.NoLinearRing("The coordinates do not meet the LinearRing criteria")
+                    ValidationResult.Error.NoLinearRing("The coordinates do not meet the LinearRing criteria")
                 }
             }
             else -> validation

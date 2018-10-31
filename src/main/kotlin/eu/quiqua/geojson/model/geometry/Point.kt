@@ -1,5 +1,7 @@
 package eu.quiqua.geojson.model.geometry
 
+import eu.quiqua.geojson.model.Type
+
 data class Point(val coordinates: Position) : Geometry {
     override val type: Type
         get() = Type.Point

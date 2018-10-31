@@ -1,4 +1,4 @@
-package eu.quiqua.geojson.model.geometry
+package eu.quiqua.geojson.model
 
 sealed class Type {
     object Point : Type()
@@ -8,19 +8,23 @@ sealed class Type {
     object MultiLineString : Type()
     object MultiPolygon : Type()
     object GeometryCollection : Type()
+    object Feature : Type()
+    object FeatureCollection : Type()
     object Unknown : Type()
 
     companion object {
         fun convertFromString(value: String): Type {
             return when (value.toLowerCase()) {
-                "point" -> Type.Point
-                "linestring" -> Type.LineString
-                "polygon" -> Type.Polygon
-                "multipoint" -> Type.MultiPoint
-                "multilinestring" -> Type.MultiLineString
-                "multipolygon" -> Type.MultiPolygon
-                "geometrycollection" -> Type.GeometryCollection
-                else -> Type.Unknown
+                "point" -> Point
+                "linestring" -> LineString
+                "polygon" -> Polygon
+                "multipoint" -> MultiPoint
+                "multilinestring" -> MultiLineString
+                "multipolygon" -> MultiPolygon
+                "geometrycollection" -> GeometryCollection
+                "feature" -> Feature
+                "featurecollection" -> FeatureCollection
+                else -> Unknown
             }
         }
 
@@ -33,6 +37,8 @@ sealed class Type {
                 is MultiLineString -> "MultiLineString"
                 is MultiPolygon -> "MultiPolygon"
                 is GeometryCollection -> "GeometryCollection"
+                is Feature -> "Feature"
+                is FeatureCollection -> "FeatureCollection"
                 else -> "Unknown"
             }
         }

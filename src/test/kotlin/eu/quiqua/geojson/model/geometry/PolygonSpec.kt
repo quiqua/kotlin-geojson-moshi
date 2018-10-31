@@ -2,6 +2,7 @@ package eu.quiqua.geojson.model.geometry
 
 import com.natpryce.hamkrest.assertion.assert
 import com.natpryce.hamkrest.isA
+import eu.quiqua.geojson.model.Type
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.context
 import org.jetbrains.spek.api.dsl.describe
@@ -53,8 +54,8 @@ internal class PolygonSpec : Spek({
                 )
             )
             val polygon = Polygon(coordinates = coordinates)
-            it("Returns a Validation.IncompatibleCoordinateDimensions") {
-                assert.that(polygon.validate(), isA<ValidationResult.IncompatibleCoordinateDimensions>())
+            it("Returns a Validation.Error.IncompatibleCoordinateDimensions") {
+                assert.that(polygon.validate(), isA<ValidationResult.Error.IncompatibleCoordinateDimensions>())
             }
         }
         context("Create with invalid coordinate boundaries") {
@@ -68,8 +69,8 @@ internal class PolygonSpec : Spek({
                 )
             )
             val polygon = Polygon(coordinates = coordinates)
-            it("Returns a Validation.OutOfRangeError") {
-                assert.that(polygon.validate(), isA<ValidationResult.OutOfRange>())
+            it("Returns a Validation.Error.OutOfRange") {
+                assert.that(polygon.validate(), isA<ValidationResult.Error.OutOfRange>())
             }
         }
         context("Coordinates are not closed") {
@@ -82,8 +83,8 @@ internal class PolygonSpec : Spek({
                 )
             )
             val polygon = Polygon(coordinates = coordinates)
-            it("Returns a Validation.NoLinearRing") {
-                assert.that(polygon.validate(), isA<ValidationResult.NoLinearRing>())
+            it("Returns a Validation.Error.NoLinearRing") {
+                assert.that(polygon.validate(), isA<ValidationResult.Error.NoLinearRing>())
             }
         }
         context("Coordinates only represent a closed line") {
@@ -95,8 +96,8 @@ internal class PolygonSpec : Spek({
                 )
             )
             val polygon = Polygon(coordinates = coordinates)
-            it("Returns a Validation.NoLinearRing") {
-                assert.that(polygon.validate(), isA<ValidationResult.NoLinearRing>())
+            it("Returns a Validation.Error.NoLinearRing") {
+                assert.that(polygon.validate(), isA<ValidationResult.Error.NoLinearRing>())
             }
         }
     }

@@ -24,18 +24,18 @@ internal class GeometryValidationSpec : Spek({
         context("With invalid input") {
             it("Returns ValidationResult.OutOfRangeError when longitude is out of range") {
                 val coordinates = Position(longitude = 181.0, latitude = 1.0)
-                assert.that(GeometryValidation.isPoint(coordinates), isA<ValidationResult.OutOfRange>())
+                assert.that(GeometryValidation.isPoint(coordinates), isA<ValidationResult.Error.OutOfRange>())
             }
             it("Returns ValidationResult.OutOfRangeError when latitude is out of range") {
                 val coordinates = Position(longitude = 1.0, latitude = 91.0)
-                assert.that(GeometryValidation.isPoint(coordinates), isA<ValidationResult.OutOfRange>())
+                assert.that(GeometryValidation.isPoint(coordinates), isA<ValidationResult.Error.OutOfRange>())
             }
         }
     }
     describe("Validate MultiPoint coordinates") {
         context("With an empty array") {
             it("Returns ValidationResult.TooFewElements") {
-                assert.that(GeometryValidation.isMultiPoint(emptyList()), isA<ValidationResult.TooFewElements>())
+                assert.that(GeometryValidation.isMultiPoint(emptyList()), isA<ValidationResult.Error.TooFewElements>())
             }
         }
         context("With at least one coordinate pair") {
@@ -86,13 +86,13 @@ internal class GeometryValidationSpec : Spek({
         context("With empty coordinates input") {
             it("Returns ValidationResult.TooFewElements") {
                 val coordinates = emptyList<Position>()
-                assert.that(GeometryValidation.isLineString(coordinates), isA<ValidationResult.TooFewElements>())
+                assert.that(GeometryValidation.isLineString(coordinates), isA<ValidationResult.Error.TooFewElements>())
             }
         }
         context("With one coordinate input") {
             it("Returns ValidationResult.TooFewElements") {
                 val coordinates = listOf(Position(longitude = 2.0, latitude = 2.0))
-                assert.that(GeometryValidation.isLineString(coordinates), isA<ValidationResult.TooFewElements>())
+                assert.that(GeometryValidation.isLineString(coordinates), isA<ValidationResult.Error.TooFewElements>())
             }
         }
         context("With different coordinate dimensions") {
@@ -103,7 +103,7 @@ internal class GeometryValidationSpec : Spek({
                 )
                 assert.that(
                     GeometryValidation.isLineString(coordinates),
-                    isA<ValidationResult.IncompatibleCoordinateDimensions>()
+                    isA<ValidationResult.Error.IncompatibleCoordinateDimensions>()
                 )
             }
         }
@@ -111,7 +111,10 @@ internal class GeometryValidationSpec : Spek({
     describe("Validate MultiLineString coordinates") {
         context("With an empty array") {
             it("Returns ValidationResult.TooFewElements") {
-                assert.that(GeometryValidation.isMultiLineString(emptyList()), isA<ValidationResult.TooFewElements>())
+                assert.that(
+                    GeometryValidation.isMultiLineString(emptyList()),
+                    isA<ValidationResult.Error.TooFewElements>()
+                )
             }
         }
         context("With at least one linestring coordinate array") {
@@ -174,7 +177,7 @@ internal class GeometryValidationSpec : Spek({
         context("With empty coordinates input") {
             it("Returns ValidationResult.TooFewElements") {
                 val coordinates = emptyList<List<Position>>()
-                assert.that(GeometryValidation.isPolygon(coordinates), isA<ValidationResult.TooFewElements>())
+                assert.that(GeometryValidation.isPolygon(coordinates), isA<ValidationResult.Error.TooFewElements>())
             }
         }
         context("With too few coordinates") {
@@ -186,7 +189,7 @@ internal class GeometryValidationSpec : Spek({
                         Position(longitude = 1.0, latitude = 1.0)
                     )
                 )
-                assert.that(GeometryValidation.isPolygon(coordinates), isA<ValidationResult.NoLinearRing>())
+                assert.that(GeometryValidation.isPolygon(coordinates), isA<ValidationResult.Error.NoLinearRing>())
             }
         }
         context("With different coordinates for start- and endpoint") {
@@ -199,7 +202,7 @@ internal class GeometryValidationSpec : Spek({
                         Position(longitude = 4.0, latitude = 4.0)
                     )
                 )
-                assert.that(GeometryValidation.isPolygon(coordinates), isA<ValidationResult.NoLinearRing>())
+                assert.that(GeometryValidation.isPolygon(coordinates), isA<ValidationResult.Error.NoLinearRing>())
             }
         }
         context("With different coordinate dimensions") {
@@ -214,7 +217,7 @@ internal class GeometryValidationSpec : Spek({
                 )
                 assert.that(
                     GeometryValidation.isPolygon(coordinates),
-                    isA<ValidationResult.IncompatibleCoordinateDimensions>()
+                    isA<ValidationResult.Error.IncompatibleCoordinateDimensions>()
                 )
             }
         }
@@ -222,7 +225,10 @@ internal class GeometryValidationSpec : Spek({
     describe("Validate MultiPolygon coordinates") {
         context("With an empty array") {
             it("Returns ValidationResult.TooFewElements") {
-                assert.that(GeometryValidation.isMultiPolygon(emptyList()), isA<ValidationResult.TooFewElements>())
+                assert.that(
+                    GeometryValidation.isMultiPolygon(emptyList()),
+                    isA<ValidationResult.Error.TooFewElements>()
+                )
             }
         }
         context("With at least one polygon coordinate array") {

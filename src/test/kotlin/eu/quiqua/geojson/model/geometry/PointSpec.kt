@@ -4,6 +4,7 @@ import com.natpryce.hamkrest.absent
 import com.natpryce.hamkrest.assertion.assert
 import com.natpryce.hamkrest.isA
 import com.natpryce.hamkrest.present
+import eu.quiqua.geojson.model.Type
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.context
 import org.jetbrains.spek.api.dsl.describe
@@ -40,8 +41,8 @@ internal class PointSpec : Spek({
         }
         context("Create with invalid coordinates") {
             val point = Point(coordinates = Position(longitude = -1000.0, latitude = 302.0))
-            it("Returns a Validation.OutOfRangeError") {
-                assert.that(point.validate(), isA<ValidationResult.OutOfRange>())
+            it("Returns a Validation.Error.OutOfRange") {
+                assert.that(point.validate(), isA<ValidationResult.Error.OutOfRange>())
             }
         }
     }

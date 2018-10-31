@@ -1,10 +1,12 @@
 package eu.quiqua.geojson.model.geometry
 
-data class Polygon(val coordinates: List<List<Position>>) : Geometry {
-    override fun validate(): ValidationResult = GeometryValidation.isPolygon(coordinates)
+import eu.quiqua.geojson.model.Type
 
+data class Polygon(val coordinates: List<List<Position>>) : Geometry {
     override val type: Type
         get() = Type.Polygon
+
+    override fun validate(): ValidationResult = GeometryValidation.isPolygon(coordinates)
 
     val exteriorRing: List<Position>?
         get() = if (coordinates.isEmpty()) null else coordinates.first()

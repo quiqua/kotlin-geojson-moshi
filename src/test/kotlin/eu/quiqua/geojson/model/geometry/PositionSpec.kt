@@ -31,23 +31,23 @@ internal class PositionSpec : Spek({
         context("Create with invalid longitude") {
             val longitude = 188.0
             val position = Position(longitude = longitude, latitude = 2.0)
-            it("Returns a Validation.OutOfRangeError") {
-                assert.that(position.validate(), isA<ValidationResult.OutOfRange>())
+            it("Returns a Validation.Error.OutOfRange") {
+                assert.that(position.validate(), isA<ValidationResult.Error.OutOfRange>())
             }
             it("Specifies the error message") {
                 val errorMessage = equalTo("Longitude '$longitude' is out of range -180 to 180")
-                assert.that(position.validate(), cast(has(ValidationResult.OutOfRange::reason, errorMessage)))
+                assert.that(position.validate(), cast(has(ValidationResult.Error.OutOfRange::reason, errorMessage)))
             }
         }
         context("Create with invalid latitude") {
             val latitude = 91.0
             val position = Position(longitude = 1.0, latitude = latitude)
-            it("Returns a Validation.OutOfRangeError") {
-                assert.that(position.validate(), isA<ValidationResult.OutOfRange>())
+            it("Returns a Validation.Error.OutOfRange") {
+                assert.that(position.validate(), isA<ValidationResult.Error.OutOfRange>())
             }
             it("Specifies the error message") {
                 val errorMessage = equalTo("Latitude '$latitude' is out of range -90 to 90")
-                assert.that(position.validate(), cast(has(ValidationResult.OutOfRange::reason, errorMessage)))
+                assert.that(position.validate(), cast(has(ValidationResult.Error.OutOfRange::reason, errorMessage)))
             }
         }
     }
