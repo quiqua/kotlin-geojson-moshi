@@ -42,4 +42,19 @@ internal class ValidationResultSpec : Spek({
             }
         }
     }
+    describe("A Validation.Warning object") {
+        val reason = "bar"
+        context("AvoidSingleGeometry") {
+            val avoidSingleGeometry = ValidationResult.Warning.AvoidSingleGeometry(reason = reason)
+            it("Has a reason why the validation failed") {
+                assert.that(avoidSingleGeometry.reason, equalTo(reason))
+            }
+        }
+        context("AvoidNestedGeometryCollections") {
+            val avoidNestedGeometryCollection = ValidationResult.Warning.AvoidNestedGeometryCollections(reason = reason)
+            it("Has a reason why the validation failed") {
+                assert.that(avoidNestedGeometryCollection.reason, equalTo(reason))
+            }
+        }
+    }
 })
