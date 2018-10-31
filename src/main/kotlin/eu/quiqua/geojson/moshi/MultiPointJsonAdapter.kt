@@ -1,6 +1,7 @@
 package eu.quiqua.geojson.moshi
 
 import com.squareup.moshi.FromJson
+import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.JsonDataException
 import com.squareup.moshi.JsonReader
 import com.squareup.moshi.JsonWriter
@@ -11,7 +12,7 @@ import eu.quiqua.geojson.model.geometry.Type
 import eu.quiqua.geojson.model.geometry.ValidationResult
 import java.lang.NullPointerException
 
-class MultiPointJsonAdapter {
+class MultiPointJsonAdapter : JsonAdapter<MultiPoint>() {
     companion object {
         private const val COORDINATES_ATTRIBUTE = "coordinates"
         private const val TYPE_ATTRIBUTE = "type"
@@ -21,7 +22,7 @@ class MultiPointJsonAdapter {
     private val positionJsonAdapter = PositionJsonAdapter()
 
     @FromJson
-    fun fromJson(reader: JsonReader): MultiPoint {
+    override fun fromJson(reader: JsonReader): MultiPoint {
         var type: Type? = null
         val coordinates = mutableListOf<Position>()
         reader.beginObject()
@@ -61,7 +62,7 @@ class MultiPointJsonAdapter {
     }
 
     @ToJson
-    fun toJson(writer: JsonWriter, value: MultiPoint?) {
+    override fun toJson(writer: JsonWriter, value: MultiPoint?) {
         if (value == null) {
             throw NullPointerException("MultiPoint was null! Wrap in .nullSafe() to write nullable values.")
         }

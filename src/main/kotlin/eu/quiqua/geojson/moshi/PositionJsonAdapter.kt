@@ -1,6 +1,7 @@
 package eu.quiqua.geojson.moshi
 
 import com.squareup.moshi.FromJson
+import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.JsonDataException
 import com.squareup.moshi.JsonReader
 import com.squareup.moshi.JsonWriter
@@ -9,10 +10,10 @@ import eu.quiqua.geojson.model.geometry.Position
 import eu.quiqua.geojson.model.geometry.ValidationResult
 import java.lang.NullPointerException
 
-class PositionJsonAdapter {
+class PositionJsonAdapter : JsonAdapter<Position>() {
 
     @FromJson
-    fun fromJson(reader: JsonReader): Position {
+    override fun fromJson(reader: JsonReader): Position {
         val positions = mutableListOf<Double>()
         reader.beginArray()
         while (reader.hasNext()) {
@@ -40,7 +41,7 @@ class PositionJsonAdapter {
     }
 
     @ToJson
-    fun toJson(writer: JsonWriter, value: Position?) {
+    override fun toJson(writer: JsonWriter, value: Position?) {
         if (value == null) {
             throw NullPointerException("Position was null! Wrap in .nullSafe() to write nullable values.")
         }

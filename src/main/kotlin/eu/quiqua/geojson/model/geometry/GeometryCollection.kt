@@ -1,6 +1,7 @@
 package eu.quiqua.geojson.model.geometry
 
 import eu.quiqua.geojson.extension.getFirstErrorOrOk
+import eu.quiqua.geojson.model.GeoJson
 
 data class GeometryCollection(val geometries: List<Geometry>) : GeoJson {
     override fun validate(): ValidationResult {

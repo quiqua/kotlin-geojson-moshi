@@ -1,7 +1,6 @@
 package eu.quiqua.geojson.moshi
 
 import com.squareup.moshi.FromJson
-import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.JsonDataException
 import com.squareup.moshi.JsonReader
 import com.squareup.moshi.JsonWriter
@@ -25,23 +24,22 @@ class GeometryCollectionJsonAdapter {
     }
 
     private val options: JsonReader.Options = JsonReader.Options.of(GEOMETRIES_ATTRIBUTE, TYPE_ATTRIBUTE)
+    private val pointDelegate = PointJsonAdapter()
+    private val lineStringDelegate = LineStringJsonAdapter()
+    private val polygonDelegate = PolygonJsonAdapter()
+    private val multiPointDelegate = MultiPointJsonAdapter()
+    private val multiLineStringDelegate = MultiLineStringJsonAdapter()
+    private val multiPolygonDelegate = MultiPolygonJsonAdapter()
 
     @FromJson
-    fun fromJson(
-        reader: JsonReader,
-        pointDelegate: JsonAdapter<Point>,
-        lineStringDelegate: JsonAdapter<LineString>,
-        polygonDelegate: JsonAdapter<Polygon>,
-        multiPointDelegate: JsonAdapter<MultiPoint>,
-        multiLineStringDelegate: JsonAdapter<MultiLineString>,
-        multiPolygonDelegate: JsonAdapter<MultiPolygon>
-    ): GeometryCollection {
+    fun fromJson(reader: JsonReader): GeometryCollection {
         var type: Type? = null
-        val geometries = mutableListOf<Geometry>()
+        var geometries: List<Geometry>? = null
         reader.beginObject()
         while (reader.hasNext()) {
             when (reader.selectName(options)) {
                 0 -> {
+                    geometries = mutableListOf()
                     reader.beginArray()
                     while (reader.hasNext()) {
                         val value = reader.readJsonValue() as Map<String, String>
@@ -65,6 +63,9 @@ class GeometryCollectionJsonAdapter {
         }
         reader.endObject()
 
+        if (geometries == null) {
+            throw JsonDataException("Required geometries is missing at ${reader.path}")
+        }
 
         if (type == null) {
             throw JsonDataException("Required type is missing at ${reader.path}")
@@ -88,7 +89,16 @@ class GeometryCollectionJsonAdapter {
         writer.beginObject()
         writer.name(GEOMETRIES_ATTRIBUTE)
         writer.beginArray()
-
+        value.geometries.forEach {
+            when (it.type) {
+                Type.Point -> pointDelegate.toJson(writer, it as Point)
+                Type.LineString -> lineStringDelegate.toJson(writer, it as LineString)
+                Type.Polygon -> polygonDelegate.toJson(writer, it as Polygon)
+                Type.MultiPoint -> multiPointDelegate.toJson(writer, it as MultiPoint)
+                Type.MultiLineString -> multiLineStringDelegate.toJson(writer, it as MultiLineString)
+                Type.MultiPolygon -> multiPolygonDelegate.toJson(writer, it as MultiPolygon)
+            }
+        }
         writer.endArray()
 
         writer.name(TYPE_ATTRIBUTE)
