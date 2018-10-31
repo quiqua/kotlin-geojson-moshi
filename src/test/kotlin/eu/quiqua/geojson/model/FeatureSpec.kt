@@ -47,6 +47,5 @@ internal class FeatureSpec : Spek({
                 assert.that(feature.validate(), isA<ValidationResult.Ok>())
             }
         }
-
     }
 })
