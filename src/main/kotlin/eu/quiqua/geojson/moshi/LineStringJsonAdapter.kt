@@ -24,11 +24,12 @@ class LineStringJsonAdapter : JsonAdapter<LineString>() {
     @FromJson
     override fun fromJson(reader: JsonReader): LineString {
         var type: Type? = null
-        val coordinates = mutableListOf<Position>()
+        var coordinates: List<Position>? = null
         reader.beginObject()
         while (reader.hasNext()) {
             when (reader.selectName(options)) {
                 0 -> {
+                    coordinates = mutableListOf()
                     reader.beginArray()
                     while (reader.hasNext()) {
                         coordinates.add(positionJsonAdapter.fromJson(reader))
@@ -44,7 +45,7 @@ class LineStringJsonAdapter : JsonAdapter<LineString>() {
         }
         reader.endObject()
 
-        if (coordinates.isEmpty()) {
+        if (coordinates == null) {
             throw JsonDataException("Required coordinates are missing at ${reader.path}")
         }
         if (type == null) {

@@ -24,11 +24,12 @@ class MultiPointJsonAdapter : JsonAdapter<MultiPoint>() {
     @FromJson
     override fun fromJson(reader: JsonReader): MultiPoint {
         var type: Type? = null
-        val coordinates = mutableListOf<Position>()
+        var coordinates: List<Position>? = null
         reader.beginObject()
         while (reader.hasNext()) {
             when (reader.selectName(options)) {
                 0 -> {
+                    coordinates = mutableListOf()
                     reader.beginArray()
                     while (reader.hasNext()) {
                         coordinates.add(positionJsonAdapter.fromJson(reader))
@@ -44,8 +45,8 @@ class MultiPointJsonAdapter : JsonAdapter<MultiPoint>() {
         }
         reader.endObject()
 
-        if (coordinates.isEmpty()) {
-            throw JsonDataException("Required positions are missing at ${reader.path}")
+        if (coordinates == null) {
+            throw JsonDataException("Required coordinates are missing at ${reader.path}")
         }
         if (type == null) {
             throw JsonDataException("Required type is missing at ${reader.path}")

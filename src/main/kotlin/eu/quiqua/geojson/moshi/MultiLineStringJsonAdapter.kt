@@ -24,11 +24,12 @@ class MultiLineStringJsonAdapter : JsonAdapter<MultiLineString>() {
     @FromJson
     override fun fromJson(reader: JsonReader): MultiLineString {
         var type: Type? = null
-        val coordinates = mutableListOf<List<Position>>()
+        var coordinates: List<List<Position>>? = null
         reader.beginObject()
         while (reader.hasNext()) {
             when (reader.selectName(options)) {
                 0 -> {
+                    coordinates = mutableListOf()
                     reader.beginArray()
                     while (reader.hasNext()) {
                         reader.beginArray()
@@ -50,7 +51,7 @@ class MultiLineStringJsonAdapter : JsonAdapter<MultiLineString>() {
         }
         reader.endObject()
 
-        if (coordinates.isEmpty()) {
+        if (coordinates == null) {
             throw JsonDataException("Required coordinates are missing at ${reader.path}")
         }
         if (type == null) {

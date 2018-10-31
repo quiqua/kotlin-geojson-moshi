@@ -24,11 +24,12 @@ class MultiPolygonJsonAdapter : JsonAdapter<MultiPolygon>() {
     @FromJson
     override fun fromJson(reader: JsonReader): MultiPolygon {
         var type: Type? = null
-        val coordinates = mutableListOf<List<List<Position>>>()
+        var coordinates: List<List<List<Position>>>? = null
         reader.beginObject()
         while (reader.hasNext()) {
             when (reader.selectName(options)) {
                 0 -> {
+                    coordinates = mutableListOf()
                     reader.beginArray()
                     while (reader.hasNext()) {
                         reader.beginArray()
@@ -56,7 +57,7 @@ class MultiPolygonJsonAdapter : JsonAdapter<MultiPolygon>() {
         }
         reader.endObject()
 
-        if (coordinates.isEmpty()) {
+        if (coordinates == null) {
             throw JsonDataException("Required coordinates are missing at ${reader.path}")
         }
         if (type == null) {
