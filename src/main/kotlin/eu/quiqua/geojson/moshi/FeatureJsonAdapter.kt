@@ -17,7 +17,6 @@ import eu.quiqua.geojson.model.geometry.MultiPolygon
 import eu.quiqua.geojson.model.geometry.Point
 import eu.quiqua.geojson.model.geometry.Polygon
 import eu.quiqua.geojson.model.geometry.ValidationResult
-import java.lang.NullPointerException
 
 class FeatureJsonAdapter(objectJsonAdapter: JsonAdapter<Any>?) : JsonAdapter<Feature>() {
     companion object {
@@ -46,15 +45,17 @@ class FeatureJsonAdapter(objectJsonAdapter: JsonAdapter<Any>?) : JsonAdapter<Fea
         while (reader.hasNext()) {
             when (reader.selectName(options)) {
                 0 -> {
-                    val rawJson = reader.readJsonValue() as Map<*, *>
-                    when ((rawJson.getOrDefault(TYPE_ATTRIBUTE, "invalid") as String).toLowerCase()) {
-                        "point" -> geometry = pointDelegate.fromJsonValue(rawJson)
-                        "linestring" -> geometry = lineStringDelegate.fromJsonValue(rawJson)
-                        "polygon" -> geometry = polygonDelegate.fromJsonValue(rawJson)
-                        "multipoint" -> geometry = multiPointDelegate.fromJsonValue(rawJson)
-                        "multilinestring" -> geometry = multiLineStringDelegate.fromJsonValue(rawJson)
-                        "multipolygon" -> geometry = multiPolygonDelegate.fromJsonValue(rawJson)
-                        "geometrycollection" -> geometry = geometryCollectionDelegate.fromJsonValue(rawJson)
+                    val rawJson = reader.readJsonValue() as Map<*, *>?
+                    rawJson?.let {
+                        when ((rawJson.getOrDefault(TYPE_ATTRIBUTE, "invalid") as String).toLowerCase()) {
+                            "point" -> geometry = pointDelegate.fromJsonValue(rawJson)
+                            "linestring" -> geometry = lineStringDelegate.fromJsonValue(rawJson)
+                            "polygon" -> geometry = polygonDelegate.fromJsonValue(rawJson)
+                            "multipoint" -> geometry = multiPointDelegate.fromJsonValue(rawJson)
+                            "multilinestring" -> geometry = multiLineStringDelegate.fromJsonValue(rawJson)
+                            "multipolygon" -> geometry = multiPolygonDelegate.fromJsonValue(rawJson)
+                            "geometrycollection" -> geometry = geometryCollectionDelegate.fromJsonValue(rawJson)
+                        }
                     }
                 }
                 1 -> properties = reader.readJsonValue() as Map<*, *>?
@@ -83,10 +84,10 @@ class FeatureJsonAdapter(objectJsonAdapter: JsonAdapter<Any>?) : JsonAdapter<Fea
 
     @ToJson
     override fun toJson(writer: JsonWriter, value: Feature?) {
-
         if (value == null) {
-            throw NullPointerException("Feature was null! Wrap in .nullSafe() to write nullable values.")
+            throw JsonDataException("Feature was null! Wrap in .nullSafe() to write nullable values.")
         }
+        writer.serializeNulls = true
         writer.beginObject()
         writer.name(GEOMETRY_ATTRIBUTE)
         value.geometry?.let {
